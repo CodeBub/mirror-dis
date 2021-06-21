@@ -36,6 +36,34 @@ c. 进入 `配置文件` 部分，删除所有 location 信息，并填入下面
         sub_filter_types text/html text/css application/javascript;
     }
     
+    location /api/ { 
+
+      proxy_pass https://discord.com:443;
+      proxy_set_header host discord.com;
+      proxy_set_header accept-encoding '';
+      proxy_set_header referer 'https://discord.com/login';
+      proxy_set_header origin 'https://discord.com';
+      
+        sub_filter_once off;
+        sub_filter gateway.discord.gg dis.plazz.fun/gg;
+        sub_filter_types text/html text/css application/javascript application/json;
+    }
+    
+    location /gg/ { 
+
+      proxy_pass https://gateway.discord.gg:443/;
+      proxy_set_header host gateway.discord.gg;
+      proxy_set_header accept-encoding '';
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "Upgrade";
+      
+        sub_filter_once off;
+        sub_filter gateway.discord.gg dis.plazz.fun/gg;
+        sub_filter_types text/html text/css application/javascript application/json;
+        
+    }
+    
     
     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf|pdf)$
     {
